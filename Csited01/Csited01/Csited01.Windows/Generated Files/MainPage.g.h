@@ -8,6 +8,16 @@
 //     the code is regenerated.
 //------------------------------------------------------------------------------
 
+namespace Windows {
+    namespace UI {
+        namespace Xaml {
+            namespace Controls {
+                ref class TextBlock;
+                ref class TextBox;
+            }
+        }
+    }
+}
 
 namespace Csited01
 {
@@ -21,6 +31,8 @@ namespace Csited01
     private:
         bool _contentLoaded;
     
+        private: ::Windows::UI::Xaml::Controls::TextBlock^ greetingOutput;
+        private: ::Windows::UI::Xaml::Controls::TextBox^ nameInput;
     };
 }
 
