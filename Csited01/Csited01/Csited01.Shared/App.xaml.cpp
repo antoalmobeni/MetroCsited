@@ -5,7 +5,8 @@
 
 #include "pch.h"
 #include "MainPage.xaml.h"
-
+#include "Common\SuspensionManager.h"
+using namespace concurrency;
 using namespace Csited01;
 
 using namespace Platform;
@@ -49,7 +50,10 @@ void App::OnLaunched(LaunchActivatedEventArgs^ e)
 		DebugSettings->EnableFrameRateCounter = true;
 	}
 #endif
-
+	if (e->PreviousExecutionState == ApplicationExecutionState::Terminated)
+	{
+		Csited01::Common::SuspensionManager::RestoreAsync();
+	}
 	auto rootFrame = dynamic_cast<Frame^>(Window::Current->Content);
 
 	// Do not repeat app initialization when the Window already has content,
@@ -59,6 +63,8 @@ void App::OnLaunched(LaunchActivatedEventArgs^ e)
 		// Create a Frame to act as the navigation context and associate it with
 		// a SuspensionManager key
 		rootFrame = ref new Frame();
+
+		Csited01::Common::SuspensionManager::RegisterFrame(rootFrame, "appFrame");
 
 		// TODO: Change this value to a cache size that is appropriate for your application.
 		rootFrame->CacheSize = 1;
@@ -139,4 +145,7 @@ void App::OnSuspending(Object^ sender, SuspendingEventArgs^ e)
 	(void) e;		// Unused parameter
 
 	// TODO: Save application state and stop any background activity
+
+	auto deferral = e->SuspendingOperation->GetDeferral();
+	create_task(Csited01::Common::SuspensionManager::SaveAsync()).then([deferral]() {deferral->Complete(); });
 }

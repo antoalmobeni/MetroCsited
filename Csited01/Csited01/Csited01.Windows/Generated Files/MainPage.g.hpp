@@ -26,6 +26,10 @@ void ::Csited01::MainPage::InitializeComponent()
     greetingOutput = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"greetingOutput"));
     // Get the TextBox named 'nameInput'
     nameInput = safe_cast<::Windows::UI::Xaml::Controls::TextBox^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"nameInput"));
+    // Get the Button named 'backButton'
+    backButton = safe_cast<::Windows::UI::Xaml::Controls::Button^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"backButton"));
+    // Get the TextBlock named 'pageTitle'
+    pageTitle = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"pageTitle"));
 }
 
 void ::Csited01::MainPage::Connect(int connectionId, Platform::Object^ target)
@@ -33,6 +37,10 @@ void ::Csited01::MainPage::Connect(int connectionId, Platform::Object^ target)
     switch (connectionId)
     {
     case 1:
+        (safe_cast<::Windows::UI::Xaml::Controls::TextBox^>(target))->TextChanged +=
+            ref new ::Windows::UI::Xaml::Controls::TextChangedEventHandler(this, (void (::Csited01::MainPage::*)(Platform::Object^, Windows::UI::Xaml::Controls::TextChangedEventArgs^))&MainPage::nameInput_TextChanged);
+        break;
+    case 2:
         (safe_cast<::Windows::UI::Xaml::Controls::Primitives::ButtonBase^>(target))->Click +=
             ref new ::Windows::UI::Xaml::RoutedEventHandler(this, (void (::Csited01::MainPage::*)(Platform::Object^, Windows::UI::Xaml::RoutedEventArgs^))&MainPage::Button_Click);
         break;

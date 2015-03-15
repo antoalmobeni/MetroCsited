@@ -23,7 +23,6 @@ namespace Csited01
 #if WINAPI_FAMILY==WINAPI_FAMILY_PHONE_APP
 		Windows::UI::Xaml::Media::Animation::TransitionCollection^ _transitions;
 		Windows::Foundation::EventRegistrationToken _firstNavigatedToken;
-
 		void RootFrame_FirstNavigated(Platform::Object^ sender, Windows::UI::Xaml::Navigation::NavigationEventArgs^ e);
 #endif
 
