@@ -110,3 +110,17 @@ void PhotoPage::SaveState(Object^ sender, Common::SaveStateEventArgs^ e){
 	(void) sender;	// Unused parameter
 	(void) e; // Unused parameter
 }
+
+
+void Csited01::PhotoPage::pageRoot_SizeChanged(Platform::Object^ sender, Windows::UI::Xaml::SizeChangedEventArgs^ e)
+{
+	if (e->NewSize.Height / e->NewSize.Width >= 1)
+	{
+		VisualStateManager::GoToState(this, "Portrait", true);
+	}
+	else
+	{
+		VisualStateManager::GoToState(this, "Landscape", true);
+	}
+
+}

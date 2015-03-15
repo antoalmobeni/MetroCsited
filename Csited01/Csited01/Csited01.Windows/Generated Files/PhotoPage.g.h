@@ -21,6 +21,13 @@ namespace Windows {
         }
     }
 }
+namespace Windows {
+    namespace UI {
+        namespace Xaml {
+            ref class VisualState;
+        }
+    }
+}
 
 namespace Csited01
 {
@@ -39,6 +46,8 @@ namespace Csited01
         private: ::Windows::UI::Xaml::Controls::Image^ displayImage;
         private: ::Windows::UI::Xaml::Controls::Button^ backButton;
         private: ::Windows::UI::Xaml::Controls::TextBlock^ pageTitle;
+        private: ::Windows::UI::Xaml::VisualState^ Landscape;
+        private: ::Windows::UI::Xaml::VisualState^ Portrait;
     };
 }
 

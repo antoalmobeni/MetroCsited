@@ -26,20 +26,27 @@ void ::Csited01::PhotoPage::InitializeComponent()
     contentRoot = safe_cast<::Windows::UI::Xaml::Controls::Grid^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"contentRoot"));
     // Get the StackPanel named 'imagePanel'
     imagePanel = safe_cast<::Windows::UI::Xaml::Controls::StackPanel^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"imagePanel"));
-    // Get the TextBlock named 'tbName'
-    tbName = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"tbName"));
-    // Get the TextBlock named 'tbPath'
-    tbPath = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"tbPath"));
     // Get the Image named 'displayImage'
     displayImage = safe_cast<::Windows::UI::Xaml::Controls::Image^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"displayImage"));
     // Get the Button named 'backButton'
     backButton = safe_cast<::Windows::UI::Xaml::Controls::Button^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"backButton"));
     // Get the TextBlock named 'pageTitle'
     pageTitle = safe_cast<::Windows::UI::Xaml::Controls::TextBlock^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"pageTitle"));
+    // Get the VisualState named 'Landscape'
+    Landscape = safe_cast<::Windows::UI::Xaml::VisualState^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"Landscape"));
+    // Get the VisualState named 'Portrait'
+    Portrait = safe_cast<::Windows::UI::Xaml::VisualState^>(static_cast<Windows::UI::Xaml::IFrameworkElement^>(this)->FindName(L"Portrait"));
 }
 
 void ::Csited01::PhotoPage::Connect(int connectionId, Platform::Object^ target)
 {
+    switch (connectionId)
+    {
+    case 1:
+        (safe_cast<::Windows::UI::Xaml::FrameworkElement^>(target))->SizeChanged +=
+            ref new ::Windows::UI::Xaml::SizeChangedEventHandler(this, (void (::Csited01::PhotoPage::*)(Platform::Object^, Windows::UI::Xaml::SizeChangedEventArgs^))&PhotoPage::pageRoot_SizeChanged);
+        break;
+    }
     (void)connectionId; // Unused parameter
     (void)target; // Unused parameter
     _contentLoaded = true;

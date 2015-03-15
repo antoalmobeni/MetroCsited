@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Page x:ConnectionId='1'
     x:Name="pageRoot"
     x:Class="Csited01.PhotoPage"
     DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
@@ -8,7 +8,8 @@
     xmlns:common="using:Csited01.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+                                      >
 
 
 
@@ -25,8 +26,7 @@
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="70"/>
+
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -45,20 +45,59 @@
             <TextBlock x:Name="pageTitle" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40" Text="{StaticResource AppName}"/>
         </Grid>
-        <Grid x:Name="contentRoot" Margin="120,0,0,120" Grid.Row="1"/>
-        <Button Content="Get Photo" Margin="25,2,0,14" Grid.Row="1"/>
-        <TextBlock Grid.Row="2" TextWrapping="Wrap" Text="TextBlock" FontSize="16" Margin="28,5,-28,503" Grid.RowSpan="2"/>
-        <StackPanel x:Name="imagePanel" HorizontalAlignment="Left" Height="100" Grid.Row="3" Width="100" VerticalAlignment="Top" Orientation="Horizontal" Background="Gray" Margin="28,40,0,0">
-            <Border BorderBrush="Black" BorderThickness="1" Background="Gray">
-                <Image x:Name="displayImage" Source="Assets/Logo.png" Margin="0,-142,0,142"/>
-            </Border>
-            <StackPanel Margin="20,0,0,0">
-                <TextBlock TextWrapping="Wrap" Text="FileName:" Style="{StaticResource CaptionTextBlockStyle}"/>
-                <TextBlock x:Name="tbName" TextWrapping="Wrap" Text="TextBlock" Style="{StaticResource BodyTextBlockStyle}"/>
-                <TextBlock TextWrapping="Wrap" Text="Path:" Style="{StaticResource CaptionTextBlockStyle}"/>
-                <TextBlock x:Name="tbPath" TextWrapping="Wrap" Text="TextBlock" Style="{StaticResource BodyTextBlockStyle}"/>
+        <Grid x:Name="contentRoot" Grid.Row="1" Margin="120,0,0,120">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="70"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Content="Get photo" Grid.Row="0"/>
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" Style="{StaticResource SubheaderTextBlockStyle}"/>
+            <StackPanel x:Name="imagePanel" Grid.Row="2" Orientation="Horizontal">
+                <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Background="Gray">
+                    <Image x:Name="displayImage" Source="Assets/Logo.png"/>
+                </Border>
+                <StackPanel Margin="20,0,0,0">
+                    <TextBlock TextWrapping="Wrap" Text="File name:" Style="{StaticResource BodyTextBlockStyle}" Margin="10,0,0,30"/>
+                    <TextBlock TextWrapping="Wrap" Text="TextBlock"/>
+                    <TextBlock TextWrapping="Wrap" Text="Path:" Style="{StaticResource BodyTextBlockStyle}" Margin="10,0,0,30"/>
+                    <TextBlock TextWrapping="Wrap" Text="TextBlock"/>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
+
+        </Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Landscape">
+                    <Storyboard>
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState x:Name="Portrait">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames 
+                            Storyboard.TargetProperty="(StackPanel.Orientation)" 
+                            Storyboard.TargetName="imagePanel">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Orientation>Vertical</Orientation>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames 
+                            Storyboard.TargetProperty="(FrameworkElement.Margin)" 
+                            Storyboard.TargetName="imagePanel">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Thickness>0,0,20,0</Thickness>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
 
     </Grid>
 </Page>
