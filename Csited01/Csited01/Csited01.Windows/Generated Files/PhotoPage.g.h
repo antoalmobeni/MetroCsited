@@ -13,6 +13,8 @@ namespace Windows {
         namespace Xaml {
             namespace Controls {
                 ref class Grid;
+                ref class StackPanel;
+                ref class Image;
                 ref class Button;
                 ref class TextBlock;
             }
@@ -33,6 +35,8 @@ namespace Csited01
         bool _contentLoaded;
     
         private: ::Windows::UI::Xaml::Controls::Grid^ contentRoot;
+        private: ::Windows::UI::Xaml::Controls::StackPanel^ imagePanel;
+        private: ::Windows::UI::Xaml::Controls::Image^ displayImage;
         private: ::Windows::UI::Xaml::Controls::Button^ backButton;
         private: ::Windows::UI::Xaml::Controls::TextBlock^ pageTitle;
     };
