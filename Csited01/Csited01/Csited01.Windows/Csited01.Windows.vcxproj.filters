@@ -55,5 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainPage.xaml" />
+    <Page Include="PhotoPage.xaml" />
   </ItemGroup>
 </Project>

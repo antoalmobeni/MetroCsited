@@ -1,11 +1,11 @@
 ﻿//
-// MainPage.xaml.cpp
-// Implementation of the MainPage class
+// PhotoPage.xaml.cpp
+// Implementation of the PhotoPage class
 //
 
 #include "pch.h"
-#include "MainPage.xaml.h"
 #include "PhotoPage.xaml.h"
+
 using namespace Csited01;
 
 using namespace Platform;
@@ -23,37 +23,37 @@ using namespace Windows::UI::Xaml::Navigation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
-MainPage::MainPage()
+PhotoPage::PhotoPage()
 {
 	InitializeComponent();
 	SetValue(_defaultViewModelProperty, ref new Map<String^,Object^>(std::less<String^>()));
 	auto navigationHelper = ref new Common::NavigationHelper(this);
 	SetValue(_navigationHelperProperty, navigationHelper);
-	navigationHelper->LoadState += ref new Common::LoadStateEventHandler(this, &MainPage::LoadState);
-	navigationHelper->SaveState += ref new Common::SaveStateEventHandler(this, &MainPage::SaveState);
+	navigationHelper->LoadState += ref new Common::LoadStateEventHandler(this, &PhotoPage::LoadState);
+	navigationHelper->SaveState += ref new Common::SaveStateEventHandler(this, &PhotoPage::SaveState);
 }
 
-DependencyProperty^ MainPage::_defaultViewModelProperty =
+DependencyProperty^ PhotoPage::_defaultViewModelProperty =
 	DependencyProperty::Register("DefaultViewModel",
-		TypeName(IObservableMap<String^,Object^>::typeid), TypeName(MainPage::typeid), nullptr);
+		TypeName(IObservableMap<String^,Object^>::typeid), TypeName(PhotoPage::typeid), nullptr);
 
 /// <summary>
 /// used as a trivial view model.
 /// </summary>
-IObservableMap<String^, Object^>^ MainPage::DefaultViewModel::get()
+IObservableMap<String^, Object^>^ PhotoPage::DefaultViewModel::get()
 {
 	return safe_cast<IObservableMap<String^, Object^>^>(GetValue(_defaultViewModelProperty));
 }
 
-DependencyProperty^ MainPage::_navigationHelperProperty =
+DependencyProperty^ PhotoPage::_navigationHelperProperty =
 	DependencyProperty::Register("NavigationHelper",
-		TypeName(Common::NavigationHelper::typeid), TypeName(MainPage::typeid), nullptr);
+		TypeName(Common::NavigationHelper::typeid), TypeName(PhotoPage::typeid), nullptr);
 
 /// <summary>
 /// Gets an implementation of <see cref="NavigationHelper"/> designed to be
 /// used as a trivial view model.
 /// </summary>
-Common::NavigationHelper^ MainPage::NavigationHelper::get()
+Common::NavigationHelper^ PhotoPage::NavigationHelper::get()
 {
 	return safe_cast<Common::NavigationHelper^>(GetValue(_navigationHelperProperty));
 }
@@ -69,12 +69,12 @@ Common::NavigationHelper^ MainPage::NavigationHelper::get()
 /// The navigation parameter is available in the LoadState method 
 /// in addition to page state preserved during an earlier session.
 
-void MainPage::OnNavigatedTo(NavigationEventArgs^ e)
+void PhotoPage::OnNavigatedTo(NavigationEventArgs^ e)
 {
 	NavigationHelper->OnNavigatedTo(e);
 }
 
-void MainPage::OnNavigatedFrom(NavigationEventArgs^ e)
+void PhotoPage::OnNavigatedFrom(NavigationEventArgs^ e)
 {
 	NavigationHelper->OnNavigatedFrom(e);
 }
@@ -92,25 +92,10 @@ void MainPage::OnNavigatedFrom(NavigationEventArgs^ e)
 /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
 /// a dictionary of state preserved by this page during an earlier
 /// session. The state will be null the first time a page is visited.</param>
-void MainPage::LoadState(Object^ sender, Common::LoadStateEventArgs^ e)
+void PhotoPage::LoadState(Object^ sender, Common::LoadStateEventArgs^ e)
 {
 	(void) sender;	// Unused parameter
-
-	// Restore values stored in session state.
-	if (e->PageState != nullptr && e->PageState->HasKey("greetingOutputText"))
-	{
-		greetingOutput->Text = e->PageState->Lookup("greetingOutputText")->ToString();
-	}
-
-	// Restore values stored in app data.
-	auto roamingSettings =
-		Windows::Storage::ApplicationData::Current->RoamingSettings;
-	if (roamingSettings->Values->HasKey("userName"))
-	{
-		nameInput->Text = roamingSettings->Values->Lookup("userName")->ToString();
-	}
 	(void) e;	// Unused parameter
-	
 }
 
 /// <summary>
@@ -121,37 +106,7 @@ void MainPage::LoadState(Object^ sender, Common::LoadStateEventArgs^ e)
 /// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
 /// <param name="e">Event data that provides an empty dictionary to be populated with
 /// serializable state.</param>
-void MainPage::SaveState(Object^ sender, Common::SaveStateEventArgs^ e){
+void PhotoPage::SaveState(Object^ sender, Common::SaveStateEventArgs^ e){
 	(void) sender;	// Unused parameter
 	(void) e; // Unused parameter
-
-	// Insert adds a new key or replaces value if key already exists.
-	e->PageState->Insert("greetingOutputText", greetingOutput->Text);
-}
-
-
-void Csited01::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
-{
-	greetingOutput->Text = "Hello, " + nameInput->Text + "!";
-}
-
-
-void Csited01::MainPage::nameInput_TextChanged(Platform::Object^ sender, Windows::UI::Xaml::Controls::TextChangedEventArgs^ e)
-{
-	auto roamingSettings =
-		Windows::Storage::ApplicationData::Current->RoamingSettings;
-	roamingSettings->Values->Insert("userName", nameInput->Text);
-	if (roamingSettings->Values->HasKey("userName"))
-	{
-		nameInput->Text = roamingSettings->Values->Lookup("userName")->ToString();
-	}
-}
-
-
-void Csited01::MainPage::PhotoPageButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
-{
-	if (this->Frame != nullptr)
-	{
-		this->Frame->Navigate(TypeName(PhotoPage::typeid));
-	}
 }

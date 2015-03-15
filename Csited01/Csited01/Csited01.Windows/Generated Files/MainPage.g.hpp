@@ -37,10 +37,14 @@ void ::Csited01::MainPage::Connect(int connectionId, Platform::Object^ target)
     switch (connectionId)
     {
     case 1:
+        (safe_cast<::Windows::UI::Xaml::Controls::Primitives::ButtonBase^>(target))->Click +=
+            ref new ::Windows::UI::Xaml::RoutedEventHandler(this, (void (::Csited01::MainPage::*)(Platform::Object^, Windows::UI::Xaml::RoutedEventArgs^))&MainPage::PhotoPageButton_Click);
+        break;
+    case 2:
         (safe_cast<::Windows::UI::Xaml::Controls::TextBox^>(target))->TextChanged +=
             ref new ::Windows::UI::Xaml::Controls::TextChangedEventHandler(this, (void (::Csited01::MainPage::*)(Platform::Object^, Windows::UI::Xaml::Controls::TextChangedEventArgs^))&MainPage::nameInput_TextChanged);
         break;
-    case 2:
+    case 3:
         (safe_cast<::Windows::UI::Xaml::Controls::Primitives::ButtonBase^>(target))->Click +=
             ref new ::Windows::UI::Xaml::RoutedEventHandler(this, (void (::Csited01::MainPage::*)(Platform::Object^, Windows::UI::Xaml::RoutedEventArgs^))&MainPage::Button_Click);
         break;

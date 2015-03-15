@@ -1,11 +1,11 @@
 ﻿//
-// MainPage.xaml.h
-// Declaration of the MainPage class
+// PhotoPage.xaml.h
+// Declaration of the PhotoPage class
 //
 
 #pragma once
 
-#include "MainPage.g.h"
+#include "PhotoPage.g.h"
 #include "Common\NavigationHelper.h"
 
 namespace Csited01
@@ -14,10 +14,10 @@ namespace Csited01
 	/// A basic page that provides characteristics common to most applications.
 	/// </summary>
 	[Windows::Foundation::Metadata::WebHostHidden]
-	public ref class MainPage sealed
+	public ref class PhotoPage sealed
 	{
 	public:
-		MainPage();
+		PhotoPage();
 
 		/// <summary>
 		/// This can be changed to a strongly typed view model.
@@ -46,8 +46,5 @@ namespace Csited01
 
 		static Windows::UI::Xaml::DependencyProperty^ _defaultViewModelProperty;
 		static Windows::UI::Xaml::DependencyProperty^ _navigationHelperProperty;
-		void Button_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void nameInput_TextChanged(Platform::Object^ sender, Windows::UI::Xaml::Controls::TextChangedEventArgs^ e);
-		void PhotoPageButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 	};
 }

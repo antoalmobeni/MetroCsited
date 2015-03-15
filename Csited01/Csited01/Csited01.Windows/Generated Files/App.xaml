@@ -5,7 +5,7 @@
     xmlns:local="using:Csited01"
     RequestedTheme="Light">
     <Application.Resources>
-        <x:String x:Key="AppName">Hello World</x:String>
+        <x:String x:Key="AppName">Hello, Photo!</x:String>
     </Application.Resources>
 </Application>
 

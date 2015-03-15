@@ -11,9 +11,11 @@
 
 #include "App.xaml.h"
 #include "MainPage.xaml.h"
+#include "PhotoPage.xaml.h"
 
 #include "App.g.hpp"
 #include "MainPage.g.hpp"
+#include "PhotoPage.g.hpp"
 
 ::Platform::Collections::Vector<::Windows::UI::Xaml::Markup::IXamlMetadataProvider^>^ ::XamlTypeInfo::InfoProvider::XamlTypeInfoProvider::OtherProviders::get()
 {
@@ -124,6 +126,21 @@
         return userType;
     }
 
+    if (typeName == L"Csited01.PhotoPage")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlUserType^ userType = ref new ::XamlTypeInfo::InfoProvider::XamlUserType(this, typeName, GetXamlTypeByName(L"Windows.UI.Xaml.Controls.Page"));
+        userType->KindOfType = ::Windows::UI::Xaml::Interop::TypeKind::Custom;
+        userType->Activator =
+            []() -> Platform::Object^ 
+            {
+                return ref new ::Csited01::PhotoPage(); 
+            };
+        userType->AddMemberName(L"NavigationHelper");
+        userType->AddMemberName(L"DefaultViewModel");
+        userType->SetIsLocalType();
+        return userType;
+    }
+
     if (typeName == L"Csited01.Common.RelayCommand")
     {
         ::XamlTypeInfo::InfoProvider::XamlUserType^ userType = ref new ::XamlTypeInfo::InfoProvider::XamlUserType(this, typeName, GetXamlTypeByName(L"Object"));
@@ -159,6 +176,34 @@
             [](Object^ instance) -> Object^
             {
                 auto that = (::Csited01::MainPage^)instance;
+                return that->DefaultViewModel;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"Csited01.PhotoPage.NavigationHelper")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"NavigationHelper", L"Csited01.Common.NavigationHelper");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::Csited01::PhotoPage^)instance;
+                return that->NavigationHelper;
+            };
+
+        xamlMember->SetIsReadOnly();
+        return xamlMember;
+    }
+
+    if (longMemberName == L"Csited01.PhotoPage.DefaultViewModel")
+    {
+        ::XamlTypeInfo::InfoProvider::XamlMember^ xamlMember = ref new ::XamlTypeInfo::InfoProvider::XamlMember(this, L"DefaultViewModel", L"Windows.Foundation.Collections.IObservableMap`2<String, Object>");
+        xamlMember->Getter =
+            [](Object^ instance) -> Object^
+            {
+                auto that = (::Csited01::PhotoPage^)instance;
                 return that->DefaultViewModel;
             };
 
