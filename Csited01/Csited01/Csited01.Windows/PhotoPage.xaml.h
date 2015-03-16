@@ -14,6 +14,7 @@ namespace Csited01
 	/// A basic page that provides characteristics common to most applications.
 	/// </summary>
 	[Windows::Foundation::Metadata::WebHostHidden]
+
 	public ref class PhotoPage sealed
 	{
 	public:
@@ -41,6 +42,7 @@ namespace Csited01
 		virtual void OnNavigatedFrom(Windows::UI::Xaml::Navigation::NavigationEventArgs^ e) override;
 
 	private:
+		Platform::String^ mruToken;
 		void LoadState(Platform::Object^ sender, Common::LoadStateEventArgs^ e);
 		void SaveState(Platform::Object^ sender, Common::SaveStateEventArgs^ e);
 

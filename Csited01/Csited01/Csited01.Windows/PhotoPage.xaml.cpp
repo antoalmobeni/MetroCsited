@@ -96,6 +96,39 @@ void PhotoPage::LoadState(Object^ sender, Common::LoadStateEventArgs^ e)
 {
 	(void) sender;	// Unused parameter
 	(void) e;	// Unused parameter
+
+	if (e->PageState != nullptr && e->PageState->HasKey("mruToken"))
+	{
+		Object^ value = e->PageState->Lookup("mruToken");
+		if (value != nullptr)
+		{
+			mruToken = value->ToString();
+
+			// Open the file via the token that you stored when adding this file into the MRU list::
+			create_task(Windows::Storage::AccessCache::StorageApplicationPermissions::MostRecentlyUsedList->GetFileAsync(mruToken))
+				.then([this](Windows::Storage::StorageFile^ file)
+			{
+				if (file != nullptr)
+				{
+					// Open a stream for the selected file->
+					//  Windows.Storage->Streams.IRandomAccessStream fileStream =
+					create_task(file->OpenAsync(Windows::Storage::FileAccessMode::Read))
+						.then([this, file](Windows::Storage::Streams::IRandomAccessStream^ fileStream)
+					{
+						// Set the image source to a bitmap.
+						auto bitmapImage =
+							ref new Windows::UI::Xaml::Media::Imaging::BitmapImage();
+
+						bitmapImage->SetSource(fileStream);
+						displayImage->Source = bitmapImage;
+
+						// Set the data context for the page
+						this->DataContext = file;
+					});
+				}
+			});
+		}
+	}
 }
 
 /// <summary>
@@ -109,6 +142,11 @@ void PhotoPage::LoadState(Object^ sender, Common::LoadStateEventArgs^ e)
 void PhotoPage::SaveState(Object^ sender, Common::SaveStateEventArgs^ e){
 	(void) sender;	// Unused parameter
 	(void) e; // Unused parameter
+
+	if (mruToken != nullptr && !mruToken->IsEmpty())
+	{
+		e->PageState->Insert("mruToken", mruToken);
+	}
 }
 
 
@@ -141,37 +179,33 @@ void Csited01::PhotoPage::GetPhotoButton_Click(Platform::Object^ sender, Windows
 
 	// All this work will be done asynchronously on a background thread:
 
-	// Wrap the async call inside a concurrency::task object
-	create_task(openPicker->PickSingleFileAsync())
-
-		// Accept the unwrapped return value of previous call as input param
-		.then([this](Windows::Storage::StorageFile^ file)
+	// Open the file picker.
+	create_task(openPicker->PickSingleFileAsync()).then(
+		[this](Windows::Storage::StorageFile^ file)
 	{
 		// file is null if user cancels the file picker.
-		if (file == nullptr)
+		if (file != nullptr)
 		{
-			// Stop work and clean up.
-			cancel_current_task();
+			// Open a stream for the selected file.
+			create_task([file]()
+			{
+				return file->OpenAsync(Windows::Storage::FileAccessMode::Read);
+			}).then([this, file](Windows::Storage::Streams::IRandomAccessStream^ fileStream)
+			{
+				// Set the image source to the selected bitmap.
+				Windows::UI::Xaml::Media::Imaging::BitmapImage^ bitmapImage =
+					ref new Windows::UI::Xaml::Media::Imaging::BitmapImage();
+
+				bitmapImage->SetSource(fileStream);
+				displayImage->Source = bitmapImage;
+				this->DataContext = file;
+			}).then([this, file]()
+			{
+				// Add picked file to MostRecentlyUsedList.
+				mruToken = Windows::Storage::AccessCache::StorageApplicationPermissions::MostRecentlyUsedList->Add(file);
+			});
 		}
-
-		// For data binding text blocks to file properties
-		this->DataContext = file;
-
-		// Add picked file to MostRecentlyUsedList.
-		//mruToken = Windows::Storage::AccessCache::StorageApplicationPermissions::MostRecentlyUsedList->Add(file);
-
-		// Return the IRandomAccessStream^ object
-		return file->OpenAsync(Windows::Storage::FileAccessMode::Read);
-
-	}).then([this](Windows::Storage::Streams::IRandomAccessStream^ fileStream)
-	{
-		// Set the stream as source of the bitmap
-		Windows::UI::Xaml::Media::Imaging::BitmapImage^ bitmapImage =
-			ref new Windows::UI::Xaml::Media::Imaging::BitmapImage();
-		bitmapImage->SetSource(fileStream);
-
-		// Set the bitmap as source of the Image control
-		displayImage->Source = bitmapImage;
 	});
+
 
 }
