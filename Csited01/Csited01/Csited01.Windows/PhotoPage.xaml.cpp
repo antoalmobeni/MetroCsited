@@ -7,7 +7,7 @@
 #include "PhotoPage.xaml.h"
 
 using namespace Csited01;
-
+using namespace concurrency;
 using namespace Platform;
 using namespace Platform::Collections;
 using namespace Windows::Foundation;
@@ -122,5 +122,56 @@ void Csited01::PhotoPage::pageRoot_SizeChanged(Platform::Object^ sender, Windows
 	{
 		VisualStateManager::GoToState(this, "Landscape", true);
 	}
+
+}
+
+
+void Csited01::PhotoPage::GetPhotoButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+	auto openPicker = ref new Windows::Storage::Pickers::FileOpenPicker();
+	openPicker->SuggestedStartLocation = Windows::Storage::Pickers::PickerLocationId::PicturesLibrary;
+	openPicker->ViewMode = Windows::Storage::Pickers::PickerViewMode::Thumbnail;
+
+	// Filter to include a sample subset of file types.
+	openPicker->FileTypeFilter->Clear();
+	openPicker->FileTypeFilter->Append(".bmp");
+	openPicker->FileTypeFilter->Append(".png");
+	openPicker->FileTypeFilter->Append(".jpeg");
+	openPicker->FileTypeFilter->Append(".jpg");
+
+	// All this work will be done asynchronously on a background thread:
+
+	// Wrap the async call inside a concurrency::task object
+	create_task(openPicker->PickSingleFileAsync())
+
+		// Accept the unwrapped return value of previous call as input param
+		.then([this](Windows::Storage::StorageFile^ file)
+	{
+		// file is null if user cancels the file picker.
+		if (file == nullptr)
+		{
+			// Stop work and clean up.
+			cancel_current_task();
+		}
+
+		// For data binding text blocks to file properties
+		this->DataContext = file;
+
+		// Add picked file to MostRecentlyUsedList.
+		//mruToken = Windows::Storage::AccessCache::StorageApplicationPermissions::MostRecentlyUsedList->Add(file);
+
+		// Return the IRandomAccessStream^ object
+		return file->OpenAsync(Windows::Storage::FileAccessMode::Read);
+
+	}).then([this](Windows::Storage::Streams::IRandomAccessStream^ fileStream)
+	{
+		// Set the stream as source of the bitmap
+		Windows::UI::Xaml::Media::Imaging::BitmapImage^ bitmapImage =
+			ref new Windows::UI::Xaml::Media::Imaging::BitmapImage();
+		bitmapImage->SetSource(fileStream);
+
+		// Set the bitmap as source of the Image control
+		displayImage->Source = bitmapImage;
+	});
 
 }

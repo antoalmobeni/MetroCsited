@@ -46,6 +46,10 @@ void ::Csited01::PhotoPage::Connect(int connectionId, Platform::Object^ target)
         (safe_cast<::Windows::UI::Xaml::FrameworkElement^>(target))->SizeChanged +=
             ref new ::Windows::UI::Xaml::SizeChangedEventHandler(this, (void (::Csited01::PhotoPage::*)(Platform::Object^, Windows::UI::Xaml::SizeChangedEventArgs^))&PhotoPage::pageRoot_SizeChanged);
         break;
+    case 2:
+        (safe_cast<::Windows::UI::Xaml::Controls::Primitives::ButtonBase^>(target))->Click +=
+            ref new ::Windows::UI::Xaml::RoutedEventHandler(this, (void (::Csited01::PhotoPage::*)(Platform::Object^, Windows::UI::Xaml::RoutedEventArgs^))&PhotoPage::GetPhotoButton_Click);
+        break;
     }
     (void)connectionId; // Unused parameter
     (void)target; // Unused parameter
